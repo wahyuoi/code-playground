@@ -39,8 +39,19 @@ func BenchmarkWithdraw(b *testing.B) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for i := 0; i < dollarsPerFounder; i++ {
-				server.Withdraw(1)
+			pizzaTime := false
+			for ii := 0; ii < dollarsPerFounder; ii++ {
+				server.Transact(func(managedValue interface{}) {
+					fund := managedValue.(*Fund)
+					if fund.Balance() <= 10 {
+						pizzaTime = true
+						return
+					}
+					fund.Withdraw(1)
+				})
+				if pizzaTime {
+					break
+				}
 			}
 		}()
 	}
@@ -49,7 +60,7 @@ func BenchmarkWithdraw(b *testing.B) {
 
 	balance := server.Balance()
 
-	if balance != 0 {
-		b.Error("Balance was not zero:", balance)
+	if balance != 10 {
+		b.Error("Balance was not ten:", balance)
 	}
 }
