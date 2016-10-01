@@ -25,7 +25,7 @@ func BenchmarkWithdraw(b *testing.B) {
 		return
 	}
 
-	fund := NewFund(b.N)
+	server := NewFundServer(b.N)
 
 	dollarsPerFounder := b.N / WORKERS
 
@@ -40,14 +40,16 @@ func BenchmarkWithdraw(b *testing.B) {
 		go func() {
 			defer wg.Done()
 			for i := 0; i < dollarsPerFounder; i++ {
-				fund.Withdraw(1)
+				server.Withdraw(1)
 			}
 		}()
 	}
 
 	wg.Wait()
 
-	if fund.Balance() != 0 {
-		b.Error("Balance was not zero:", fund.Balance())
+	balance := server.Balance()
+
+	if balance != 0 {
+		b.Error("Balance was not zero:", balance)
 	}
 }
