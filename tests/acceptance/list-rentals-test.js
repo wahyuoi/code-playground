@@ -3,22 +3,27 @@ import moduleForAcceptance from 'super-rentals/tests/helpers/module-for-acceptan
 
 moduleForAcceptance('Acceptance | list rentals');
 
-test('visiting /', function(assert) {
+test('should show rentals as the home page', function (assert) {
   visit('/');
-
   andThen(function() {
-    assert.equal(currentURL(), '/');
+    assert.equal(currentURL(), '/rentals', 'should redirect automatically');
   });
 });
 
-test('should show rentals as the home page', function (assert) {
-});
-
 test('should link to information about the company', function (assert) {
+  visit('/');
+  click('a:contains("About")');
+  andThen(function(){
+    assert.equal(currentURL(),'/about', 'should navigate to about page');
+  });
 });
 
 test('should link to contact information', function (assert) {
-
+  visit('/');
+  click('a:contains("Contact")');
+  andThen(function(){
+    assert.equal(currentURL(), '/contact', 'Should redirect to contact page');
+  });
 });
 
 test('should list available rentals', function (assert) {
