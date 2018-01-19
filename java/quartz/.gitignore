@@ -1,0 +1,11 @@
+.idea/
+.gradle/
+bin/
+build/
+out/
+build-temp/
+*.iml
+*.ipr
+*.iws
+nohup.out
+target
